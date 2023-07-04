@@ -1,0 +1,38 @@
+Tailscale # This is a basic workflow to help you get started with Actions
+
+name: Tailscale 
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  delete_devices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Tailscale API Key
+        run: echo "TAILSCALE_API_KEY=${{ secrets.TAILSCALE_API_KEY }}" >> $GITHUB_ENV
+
+      - name: SSH into EC2 Instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+        run: sudo yum update
+
+          # EC2 인스턴스에 연결하여 스크립트 실행
+         # script: |
+            #!/bin/bash
+          #  device_ids=$(tailscale status --json | jq -r '.Peer | to_entries[] | select(.value.HostName | contains("github-fv")) | .value.ID')
+          #  for device_id in $device_ids; do
+          #    response=$(curl -s -X DELETE "https://api.tailscale.com/api/v2/device/$device_id" -u "$TAILSCALE_API_KEY:")
+          #    if [[ $response == *"cannot delete devices outside of your tailnet"* ]]; then
+          #      echo "Cannot delete device $device_id: Device does not belong to your tailnet"
+          #    else
+          #      echo "Deleted device $device_id"
+          #    fi
+          #  done
