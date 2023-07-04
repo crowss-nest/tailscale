@@ -1,5 +1,3 @@
-Tailscale # This is a basic workflow to help you get started with Actions
-
 name: Tailscale 
 
 on:
@@ -22,7 +20,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-        run: sudo yum update
+          run: sudo yum update
 
           # EC2 인스턴스에 연결하여 스크립트 실행
          # script: |
