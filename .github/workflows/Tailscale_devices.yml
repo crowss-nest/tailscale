@@ -21,16 +21,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            # Get device IDs
-            device_ids=$(tailscale status --json | jq -r '.Peer | to_entries[] | select(.value.HostName | contains("github-fv")) | .value.ID')
+            cd /home/ec2-user
 
-            # Iterate over device IDs and delete each device
-            for device_id in $device_ids; do
-              # Delete device
-              response=$(curl -s -X DELETE "https://api.tailscale.com/api/v2/device/$device_id" -u "$TAILSCALE_API_KEY:")
-              if [[ $response == *"cannot delete devices outside of your tailnet"* ]]; then
-                echo "Cannot delete device $device_id: Device does not belong to your tailnet"
-              else
-                echo "Deleted device $device_id"
-              fi
-            done
+            # Execute the script
+            ./delete_tailscale_device.sh
