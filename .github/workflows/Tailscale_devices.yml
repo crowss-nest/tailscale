@@ -23,5 +23,4 @@ jobs:
           script: |
             cd /home/ec2-user
 
-            # Execute the script
             ./delete_tailscale_device.sh
